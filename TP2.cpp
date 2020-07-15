@@ -4,6 +4,7 @@
 #include "ElementXML.hpp"
 #include "Histoire.hpp"
 #include "Lecteur.hpp"
+#include "arbreavl.h"
 
 
 #include <algorithm>

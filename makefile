@@ -13,6 +13,8 @@ OBJ=$(NOM).o\
     Phrase.o\
     TexteXML.o
 
+
+
 .cpp.o :
 	$(CC) $(FLAGS) -c $<
 
@@ -35,7 +37,9 @@ Phrase.cpp : Phrase.hpp
 
 TexteXML.cpp : TexteXML.hpp NoeudXML.hpp
 
-$(NOM).cpp : Histoire.hpp Lecteur.hpp Phrase.hpp
+arbreavl.h : pile.h	
+
+$(NOM).cpp : Histoire.hpp Lecteur.hpp Phrase.hpp arbreavl.h
 
 clean :
 	\rm -f *.o
