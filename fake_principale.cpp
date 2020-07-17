@@ -23,15 +23,15 @@ void decouperRequeteEnMots (string const & requete, vector<string> & tabMots);
 
 int main() {
     
-bool finProg = false;
+    bool finProg = false;
     // debut de la boucle de requetes
-    while (!finProg) {
+    while (finProg == false) {
 
         string requete;
         vector<string> tabMots;
         // on demande une suite de mots a l'utilisateur
         cout << "Entrez votre requete : " << endl;
-        cin >> requete;
+        getline(cin, requete);
 
         if (requete.empty()) {
             finProg = true;
