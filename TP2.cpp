@@ -69,6 +69,12 @@ lireDocuments( string a_nomFichier )
 void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
  vector<ArbreAVL<string>> & arbresAvls);
 
+void decouperRequeteEnMots (string const & requete, vector<string> & tabMots);
+vector<double> calculerMetrique (vector<ArbreAVL<string>> arbresAvls);
+
+void trouverCinqMeilleuresHistoires (vector<double> metriques, 
+    vector<ArbreAVL<string>> arbresAvls);
+
 
 int main() {
 
@@ -92,11 +98,11 @@ int main() {
         // Les histoires ont une variable de classe 'titre'.
         //cout << histoire->titre() << endl;
 
-        // Parcourir les Phrases qui compose une histoire à l'aide de l'iterateur des Histoires.
+        // Parcourir les Phrases qui compose une histoire ï¿½ l'aide de l'iterateur des Histoires.
         for( Phrase p : * histoire )
         {
             // p.begin() va chercher le premier mot de la Phrase p.  c'est aussi un iterateur et il peut
-            // s'utiliser avec les for augmentés.
+            // s'utiliser avec les for augmentï¿½s.
             // ici, nous affichons seulement le premier mot de la Phrase.
             //cout << *( p.begin() ) << endl;
         }
@@ -104,18 +110,40 @@ int main() {
         //cout << endl;
     }
 
+    bool finProg = false;
+    // debut de la boucle de requetes
+    while (!finProg) {
+
+        string requete;
+        vector<string> tabMots;
+        // on demande une suite de mots a l'utilisateur
+        cout << "Entrez votre requete : " << endl;
+        cin >> requete;
+
+        if (requete.empty()) {
+            finProg = true;
+        } else {
+            // on decoupe la requete en mots, on les stocke dans tabMots
+            decouperRequeteEnMots(requete, tabMots);
+            // on calcule la metrique V pour chaque histoire
+            vector<double> metriques = calculerMetrique(arbresAvls);
+            // trouver 5 histoires et les afficher
+            trouverCinqMeilleuresHistoires(metriques, arbresAvls); 
+        }
+    }
     return 0;
 }
 
 /**
-Parcourt chaque histoire du vecteur histoire et creer un
-arbre AVL pour categorisant chaque mot de l'histoire ou
-la clef est le mot en string et la definition est le 
-nombre d'occurence du mot dans l'histoire
-@param &vector< Histoire * > * histoires, le vecteur
-contenant les histoire
-@param vector<ArbreAVL<string>> & arbresAvls le vecteur
-qui stocke les arbre avl de chaque mot de l'histoire
+* Parcourt chaque histoire du vecteur histoire et creer un
+* arbre AVL pour categorisant chaque mot de l'histoire ou
+* la clef est le mot en string et la definition est le 
+* nombre d'occurence du mot dans l'histoire
+*
+* @param &vector< Histoire * > * histoires, le vecteur
+* contenant les histoire
+* @param vector<ArbreAVL<string>> & arbresAvls le vecteur
+* qui stocke les arbre avl de chaque mot de l'histoire
 **/
 
 //vector<Pile<string,int>> arbresAvls
@@ -141,6 +169,83 @@ void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
 
 }
 
+/**
+ * Extrait les differents mots de la requete entree par l'utilisateur, les 
+ * insere dans un vecteur et les retourne.
+ * 
+ * @param requete la requete de l'utilisateur
+ * @param tabmots le tableau de mots extraits
+**/
+void decouperRequeteEnMots (string const & requete, vector<string> & tabMots) {
+    string temp = "";
+    for(int i = 0; i < requete.length(); ++i) {
+        if (isalpha(requete.at(i)) || requete.at(i) == '-') {
+           temp += requete.at(i);
+           if (i == requete.length() - 1) {
+               tabMots.push_back(temp);
+           }
+        } else if (temp.length() != 0) {
+            tabMots.push_back(temp);
+            temp = "";
+        }
+    }
+}
 
+/**
+ * Calcule la metrique V pour chaque histoire, la stocke dans un vecteur et 
+ * la retourne.
+ * 
+ * @param arbresAvls les arbres des histoires
+ * @param tabmots le tableau de mots extraits
+ * @return un vecteur contenant la metrique V de chaque histoire
+**/
+vector<double> calculerMetrique (vector<ArbreAVL<string>> const & arbresAvls, 
+        vector<string> const & tabMots) {
+    vector<double> metriquePourChaqueHistoire;
+    double metriqueV;
+    for(int i = 0; i < arbresAvls.size(); ++i ) {
+        for (string mot : tabMots) {
+            // obtenir tf du mot dans cette histoire-la
+            // obtenir idf du mot (global)
+            // metriqueV += (tf * idf)
+        }
+        metriquePourChaqueHistoire.push_back(metriqueV);
+    }
+    return metriquePourChaqueHistoire;
+}
+
+/**
+ * Trouve et affiche les cinq meilleurs histoires, d'apres leur metrique V
+ * 
+ * @param metriques un vecteur contenant la metrique V de chaque histoire
+ * @param arbresAvls les arbres des histoires
+**/
+void trouverCinqMeilleuresHistoires (vector<double> metriques, 
+        vector<ArbreAVL<string>> const & arbresAvls) {
+    
+    vector<string> listeDesTitres;
+    // on a aussi le vector des metriques, dans meme ordre
+    // on cree la liste des titres 
+    for(auto arbre : arbresAvls) {
+        // aller chercher le titre, voir avec Paule
+    }
+
+    // on trouve les cinq histoires
+    for (int i = 0; i < 5; ++i) {
+        int max; 
+        int indice; 
+        for (int j = 0; j < metriques.size(); ++j) {
+            if (metriques.at(i + 1) > metriques.at(i)) {
+                max = metriques.at(i);
+                indice = i;
+            }
+        }
+        // on affiche la metrique et le titre
+        cout << max << " : " << listeDesTitres.at(i) << endl;
+        // pour ne pas qu'il prenne le meme nombre chaque fois
+        // on travaille avec une copie de metriques donc c'est pas grave anyway
+        metriques.at(i) = 0; 
+    } 
+}
 
 
