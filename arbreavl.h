@@ -47,6 +47,7 @@ class ArbreAVL {
     struct Noeud{
         Noeud(const T&);
         T contenu;
+        int nbrOccurence = 1;
         int equilibre;
         Noeud *gauche,
               *droite;
@@ -62,6 +63,7 @@ class ArbreAVL {
     const T& max(Noeud*) const;
     bool enlever(Noeud*&, const T& e);
     const T* trouver(const T& element, const Noeud* n) const;
+    //void ajoutOccurence();
 
   public:
     // Sera présenté à la semaine #7
@@ -140,6 +142,12 @@ const T* ArbreAVL<T>::trouver(const T& element, const Noeud* n) const
     }
     return &(n->contenu);
 }
+
+//AJOUT
+// template<class T>
+// void ArbreAVL<T>::Noeud::ajoutOccurence(){
+//     this.nbrOccurence++;
+// }
 
 template <class T>
 void ArbreAVL<T>::inserer(const T& element)
