@@ -17,6 +17,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <math.h>
 
 
 
@@ -68,15 +69,16 @@ lireDocuments( string a_nomFichier )
 //declaration de fonctions
 //void creerArbresAvlHistoire(&vector< Histoire * > * histoires);
 void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
- vector<map<string,int>> & arbresAvls);
+ vector<map<string,int>> & arbresAvls,vector<string> & listeTitre );
+void CalculIdf(vector<map<string,int>> & arbresAvls, map<string,int> & valeurIdf, int sizeHistoire);
 
 void decouperRequeteEnMots (string const & requete, vector<string> & tabMots);
 
-vector<double> calculerMetrique (vector<ArbreAVL<string>> const & arbresAvls, 
-        vector<string> const & tabMots);
+//vector<double> calculerMetrique (vector<ArbreAVL<string>> const & arbresAvls, 
+        //vector<string> const & tabMots);
 
-void trouverCinqMeilleuresHistoires (vector<double> metriques, 
-        vector<ArbreAVL<string>> const & arbresAvls);
+//void trouverCinqMeilleuresHistoires (vector<double> metriques, 
+        //vector<ArbreAVL<string>> const & arbresAvls);
 
 
 int main() {
@@ -87,31 +89,27 @@ int main() {
     //vecteur qui va contenir les arbres AVL de chaque histoire
     vector<map<string,int>> arbresAvls;
 
-    creerArbresAvlHistoire(histoires,arbresAvls);
+    //vecteur contient les titres de chaque histoire
+    vector<string> listeTitre;
+
+    //arbre contenant les idf(m)
+    map<string,int> valeurIdf;
+
+    creerArbresAvlHistoire(histoires,arbresAvls,listeTitre);
+    int sizeHistoire = histoires->size();
+    CalculIdf(arbresAvls,valeurIdf,sizeHistoire);
 
 
 
 
-    // Pour votre projet, enlevez le code qui suit et remplacer le par votre code.
-    // vous pouvez ajouter des fonctions.
-
-    // Parcourir les histoires a l'aide de l'iterateur du vecteur.
-    for( Histoire * histoire : * histoires )
-    {
         // Les histoires ont une variable de classe 'titre'.
         //cout << histoire->titre() << endl;
 
-        // Parcourir les Phrases qui compose une histoire � l'aide de l'iterateur des Histoires.
-        for( Phrase p : * histoire )
-        {
             // p.begin() va chercher le premier mot de la Phrase p.  c'est aussi un iterateur et il peut
             // s'utiliser avec les for augment�s.
             // ici, nous affichons seulement le premier mot de la Phrase.
             //cout << *( p.begin() ) << endl;
-        }
 
-        //cout << endl;
-    }
 
     /* PHASE DE REQUETE */
 
@@ -129,11 +127,11 @@ int main() {
             finProg = true;
         } else {
             // on decoupe la requete en mots, on les stocke dans tabMots
-            decouperRequeteEnMots(requete, tabMots);
+            //decouperRequeteEnMots(requete, tabMots);
             // on calcule la metrique V pour chaque histoire
-            vector<double> metriques = calculerMetrique(arbresAvls);
+            //vector<double> metriques = calculerMetrique(arbresAvls);
             // trouver 5 histoires et les afficher
-            trouverCinqMeilleuresHistoires(metriques, arbresAvls); 
+            //trouverCinqMeilleuresHistoires(metriques, arbresAvls); 
         }
     }
 
@@ -149,33 +147,34 @@ nombre d'occurence du mot dans l'histoire
 contenant les histoire
 @param vector<ArbreAVL<string>> & arbresAvls le vecteur
 qui stocke les arbre avl de chaque mot de l'histoire
+Construit aussi le vecteur de titres
 **/
 
 //TODO : EST CE QU'IL FAUT AVOIR DES MOTS a 0?
 void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
- vector<map<string,int>> & arbresAvls ){
+ vector<map<string,int>> & arbresAvls, vector<string> & listeTitre  ){
     
 
     for( Histoire * histoire : * histoires ){
         int index = 0;
         //creer un arbre avl
         map<string,int> arbre;
+
         //cout << histoire->titre() << endl;
         for( Phrase p : * histoire ){
+            //ajouter titre
+            listeTitre.push_back(histoire->titre());
             //chaque phrase ajouter le mot a l'arbre
             for(vector< string >::const_iterator iter = p.begin();
                 iter!=p.end();++iter){
                 //TODO occurence + verifier que le mot existe deja
                 if(arbre.find(*iter) != arbre.end()){
-                    //cout << "REPETITION" <<endl;
                     // Si il y a repition changer nbr occurence du noeud
-                    //*position.ajoutOccurence();
                     arbre.at(*iter)++;
 
                 } else{
                     arbre.insert(pair<string,int>(*iter,0));
                 }
-                //cout << *iter <<endl;
             }
         }
         arbresAvls.push_back(arbre);
@@ -183,6 +182,46 @@ void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
         index++;
         //mettre le nouvel arbre dans le vecteur
 
+
+    }
+
+
+}
+
+void CalculIdf(vector<map<string,int>> & arbresAvls, map<string,int> & valeurIdf,
+int sizeHistoire ){
+
+    for(map<string,int> arbre : arbresAvls){
+        //pour chaque element de l'arbre
+        cout << "Histoire" << endl;
+        for(map<string,int>::iterator iter=arbre.begin();iter != arbre.end(); iter++){
+            if(valeurIdf.find((*iter).first) != arbre.end()){
+                cout << (*iter).first << endl;
+                string mot = (*iter).first;
+                int nbrOccurence = 0;
+                for(map<string,int> arbre2 : arbresAvls){
+                    
+                    if(arbre2.find(mot) != arbre2.end()){
+                        nbrOccurence += arbre2.at(mot);
+                    }
+
+                }
+                //calculer logarithme
+                if(nbrOccurence != 0){
+                    int valeurLog = log2(sizeHistoire/nbrOccurence);
+                    //valeurIdf.insert(pair<string,int>(mot,valeurLog));
+                    cout << valeurLog << endl;
+
+                }
+                
+
+
+
+            }
+
+
+
+        }
 
     }
 
@@ -197,6 +236,7 @@ void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
  * @param requete la requete de l'utilisateur
  * @param tabmots le tableau de mots extraits
 **/
+
 void decouperRequeteEnMots (string const & requete, vector<string> & tabMots) {
     string temp = "";
     for(int i = 0; i < requete.length(); ++i) {
@@ -212,6 +252,7 @@ void decouperRequeteEnMots (string const & requete, vector<string> & tabMots) {
     }
 }
 
+
 /**
  * Calcule la metrique V pour chaque histoire, la stocke dans un vecteur et 
  * la retourne.
@@ -220,6 +261,7 @@ void decouperRequeteEnMots (string const & requete, vector<string> & tabMots) {
  * @param tabmots le tableau de mots extraits
  * @return un vecteur contenant la metrique V de chaque histoire
 **/
+/*
 vector<double> calculerMetrique (vector<ArbreAVL<string>> const & arbresAvls, 
         vector<string> const & tabMots) {
     vector<double> metriquePourChaqueHistoire;
@@ -234,6 +276,9 @@ vector<double> calculerMetrique (vector<ArbreAVL<string>> const & arbresAvls,
     }
     return metriquePourChaqueHistoire;
 }
+*/
+
+
 
 /**
  * Trouve et affiche les cinq meilleurs histoires, d'apres leur metrique V
@@ -241,6 +286,8 @@ vector<double> calculerMetrique (vector<ArbreAVL<string>> const & arbresAvls,
  * @param metriques un vecteur contenant la metrique V de chaque histoire
  * @param arbresAvls les arbres des histoires
 **/
+
+/*
 void trouverCinqMeilleuresHistoires (vector<double> metriques, 
         vector<ArbreAVL<string>> const & arbresAvls) {
     
@@ -268,6 +315,7 @@ void trouverCinqMeilleuresHistoires (vector<double> metriques,
         metriques.at(i) = 0; 
     } 
 }
+*/
 
 
 
