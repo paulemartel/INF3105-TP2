@@ -254,7 +254,11 @@ vector<double> calculerMetrique (vector<map<string,int>> const & arbresAvls,
 **/
 void trouverCinqMeilleuresHistoires (vector<double> copieDeMetriques,
         vector<string> listeTitre) {
-
+    
+    // on inverse les deux pour respecter l'ordre des tests
+    reverse(copieDeMetriques.begin(),copieDeMetriques.end());
+    reverse(listeTitre.begin(),listeTitre.end());  
+    
     for (int j = 0; j < 5; ++j) {
         int valeurMax = copieDeMetriques.at(0);
         int indiceMax = 0;
