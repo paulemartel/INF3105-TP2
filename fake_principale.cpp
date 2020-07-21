@@ -1,11 +1,9 @@
-
-
 #include "DocumentXML.hpp"
 #include "ElementXML.hpp"
 #include "Histoire.hpp"
 #include "Lecteur.hpp"
 #include "arbreavl.h"
-
+#include "arbremap.h"
 
 #include <algorithm>
 #include <cassert>
@@ -31,7 +29,7 @@ void CalculIdf(vector<map<string,int>> & arbresAvls, map<string,int> & valeurIdf
 void decouperRequeteEnMots (string const & requete, vector<string> & tabMots);
 
 vector<double> calculerMetrique (vector<map<string,int>> const & arbresAvls, 
-        vector<string> const & tabMots);
+        map<string,int> & valeurIdf, vector<string> const & tabMots);
 
 void trouverCinqMeilleuresHistoires (vector<double> metriques, 
         vector<string> listeTitre);
@@ -67,10 +65,6 @@ int main() {
 
     /* PHASE DE REQUETE */
 
-    vector<double> metriques = {10,20,30,40,50}; // TEST
-    listeTitre = {"Titre 10", "Titre 20", "Titre 30", "Titre 40", "Titre 50"}; // TEST
-    trouverCinqMeilleuresHistoires(metriques, listeTitre); 
-/*
     bool finProg = false;
     // debut de la boucle de requetes
     while (!finProg) {
@@ -85,16 +79,15 @@ int main() {
             finProg = true;
         } else {
             // on decoupe la requete en mots, on les stocke dans tabMots
-            //decouperRequeteEnMots(requete, tabMots);
+            decouperRequeteEnMots(requete, tabMots);
             // on calcule la metrique V pour chaque histoire
-            //vector<double> metriques = calculerMetrique(arbresAvls);
+            vector<double> metriques = calculerMetrique(arbresAvls, valeurIdf, 
+                tabMots);
             // trouver 5 histoires et les afficher
-            vector<double> metriques = {10,20,30,40,50}; // TEST
-            listeTitre = {"Titre 10", "Titre 20", "Titre 30", "Titre 40", "Titre 50"}; // TEST
             trouverCinqMeilleuresHistoires(metriques, listeTitre); 
         }
     }
-*/
+
     return 0;
 }
 
@@ -143,8 +136,8 @@ void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
     }
 }
 
-void CalculIdf(vector<map<string,int>> & arbresAvls, map<string,int> & valeurIdf,
-int sizeHistoire ){
+void CalculIdf(vector<map<string,int>> & arbresAvls, 
+        map<string,int> & valeurIdf, int sizeHistoire ){
 
     for(map<string,int> arbre : arbresAvls){
         //pour chaque element de l'arbre
@@ -204,14 +197,16 @@ void decouperRequeteEnMots (string const & requete, vector<string> & tabMots) {
  * @return un vecteur contenant la metrique V de chaque histoire
 **/
 vector<double> calculerMetrique (vector<map<string,int>> const & arbresAvls, 
-        vector<string> const & tabMots) {
+        map<string,int> & valeurIdf, vector<string> const & tabMots) {
     vector<double> metriquePourChaqueHistoire;
     double metriqueV;
     for(int i = 0; i < arbresAvls.size(); ++i ) {
         for (string mot : tabMots) {
-            // obtenir tf du mot dans cette histoire-la
-            // obtenir idf du mot (global)
-            // metriqueV += (tf * idf)
+            double tf = (arbresAvls.at(i)).at(mot); // A MODIFIER
+            // Si marche pas : ((arbresAvls.at(i)).find(mot))->second;
+            double idf = valeurIdf.at(mot); // A MODIFIER
+            // Si marche pas : (valeurIdf.find(mot))->second; 
+            metriqueV += (tf * idf);
         }
         metriquePourChaqueHistoire.push_back(metriqueV);
     }
@@ -219,27 +214,27 @@ vector<double> calculerMetrique (vector<map<string,int>> const & arbresAvls,
 }
 
 /**
- * Trouve et affiche les cinq meilleurs histoires, d'apres leur metrique V
+ * Trouve et affiche les cinq meilleurs histoires, d'apres leur metrique V.
  * 
  * @param metriques un vecteur contenant la metrique V de chaque histoire
  * @param arbresAvls les arbres des histoires
 **/
-void trouverCinqMeilleuresHistoires (vector<double> copieDeMetriques, 
+void trouverCinqMeilleuresHistoires (vector<double> copieDeMetriques,
         vector<string> listeTitre) {
 
     for (int j = 0; j < 5; ++j) {
-        int valeurMax = copieDeMetriques.at(0); 
-        int indiceMax = 0; 
-        for (int i = 0; i < copieDeMetriques.size() - 1; ++i) {
-            if (copieDeMetriques.at(i + 1) > copieDeMetriques.at(i)) {
-                valeurMax = copieDeMetriques.at(i + 1);
-                indiceMax = i + 1;
+        int valeurMax = copieDeMetriques.at(0);
+        int indiceMax = 0;
+        for (int i = 1; i < copieDeMetriques.size(); ++i) {
+            if (copieDeMetriques.at(i) > valeurMax) {
+                valeurMax = copieDeMetriques.at(i);
+                indiceMax = i;
             }
         }
         cout << valeurMax << " : " << listeTitre.at(indiceMax) << endl;
         // pour ne pas qu'il prenne le meme nombre chaque fois
-        copieDeMetriques.at(indiceMax) = -1; 
-    } 
+        copieDeMetriques.at(indiceMax) = -1;
+    }
 }
 
 vector< Histoire * > * lireDocuments( string a_nomFichier )
