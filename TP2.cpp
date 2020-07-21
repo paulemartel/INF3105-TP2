@@ -147,11 +147,10 @@ void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
         int index = 0;
         //creer un arbre avl
         map<string,int> arbre;
-
+        //ajouter titre
+        listeTitre.push_back(histoire->titre());
         //cout << histoire->titre() << endl;
         for( Phrase p : * histoire ){
-            //ajouter titre
-            listeTitre.push_back(histoire->titre());
             //chaque phrase ajouter le mot a l'arbre
             for(vector< string >::const_iterator iter = p.begin();
                 iter!=p.end();++iter){
@@ -166,7 +165,7 @@ void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
             }
         }
         arbresAvls.push_back(arbre);
-        cout << "NOMBRE DE : and : " << arbre.at("and") << endl;
+        //cout << "NOMBRE DE : and : " << arbre.at("and") << endl;
         index++;
         //mettre le nouvel arbre dans le vecteur
     }
@@ -177,10 +176,10 @@ int sizeHistoire ){
 
     for(map<string,int> arbre : arbresAvls){
         //pour chaque element de l'arbre
-        cout << "Histoire" << endl;
+        //cout << "Histoire" << endl;
         for(map<string,int>::iterator iter=arbre.begin();iter != arbre.end(); iter++){
             if(valeurIdf.find((*iter).first) != arbre.end()){
-                cout << (*iter).first << endl;
+                //cout << (*iter).first << endl;
                 string mot = (*iter).first;
                 int nbrOccurence = 0;
                 for(map<string,int> arbre2 : arbresAvls){
@@ -194,7 +193,7 @@ int sizeHistoire ){
                 if(nbrOccurence != 0){
                     int valeurLog = log2(sizeHistoire/nbrOccurence);
                     //valeurIdf.insert(pair<string,int>(mot,valeurLog));
-                    cout << valeurLog << endl;
+                    //cout << valeurLog << endl;
                 }
             }
         }
@@ -238,12 +237,8 @@ vector<double> calculerMetrique (vector<map<string,int>> const & arbresAvls,
     double metriqueV;
     for(int i = 0; i < arbresAvls.size(); ++i ) {
         for (string mot : tabMots) {
-            double tf = (arbresAvls.at(i)).at(mot); // A MODIFIER
-            // Si marche pas pour notre vrai arbre : 
-            // ((arbresAvls.at(i)).find(mot))->second;
-            double idf = valeurIdf.at(mot); // A MODIFIER
-            // Si marche pas pour notre vrai arbre : 
-            // (valeurIdf.find(mot))->second; 
+            double tf = ((arbresAvls.at(i)).find(mot))->second;
+            double idf = (valeurIdf.find(mot))->second; 
             metriqueV += (tf * idf);
         }
         metriquePourChaqueHistoire.push_back(metriqueV);
