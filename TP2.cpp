@@ -10,7 +10,6 @@
 #include <cmath>
 #include <iomanip>
 #include <iostream>
-#include <map>
 #include <sstream>
 #include <string>
 #include <utility>
@@ -90,6 +89,9 @@ int main() {
 
 
 
+
+
+
         // Les histoires ont une variable de classe 'titre'.
         //cout << histoire->titre() << endl;
 
@@ -154,19 +156,20 @@ void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
             //chaque phrase ajouter le mot a l'arbre
             for(vector< string >::const_iterator iter = p.begin();
                 iter!=p.end();++iter){
-                //cout << *iter << endl;
+                //cout<<"MOT: "<< (*iter)<< endl;
                 //TODO occurence + verifier que le mot existe deja
                 if(arbre.rechercher(*iter) != 0){
                     string mot = *(iter);
                     //changer nombre d'occurence du noeud
                     arbre[mot]++;
                 } else{
-                    arbre[*iter] = 0;
+                    arbre[*iter] = 1;
                 }
             }
         }
         arbresAvls.push_back(arbre);
-        cout << "NOMBRE DE : and : " << arbre["and"] << endl;
+        cout << "NOMBRE DE : allo : " << arbre["allo"] << endl;
+        
         index++;
     }
 }
@@ -181,12 +184,16 @@ void CalculIdf(vector<ArbreMap<string,int>> & arbresAvls, ArbreMap<string,double
                 if(valeurIdf.rechercher(mot) == 0){
                     for(ArbreMap<string,int> arbre : arbresAvls){
                     //calculer nbr occurence du mot
-                    nbrOccurence+=arbre[mot];
-
+                        if(arbre[mot] != 0){
+                            nbrOccurence++;
+                        }
                     }
                     //calculer logarithme
                     if(nbrOccurence != 0){
-                        double valeurLog = log2((double)sizeHistoire/nbrOccurence);
+                        cout << "MOT: " << mot << endl;
+                        cout<<"SIZE : " << sizeHistoire<<endl;
+                        cout<<"NBR OCCURENCE: "<<nbrOccurence<<endl;
+                        double valeurLog = log2((double)sizeHistoire/(double)nbrOccurence);
                         //inserer dans valeurIdf
                         valeurIdf[mot] = valeurLog;
                         cout << valeurLog << endl;
@@ -245,6 +252,7 @@ vector<double> calculerMetrique (vector<ArbreMap<string,int>> & arbresAvls,
             metriqueV += (tf * idf);
         }
         metriquePourChaqueHistoire.push_back(metriqueV);
+        metriqueV = 0.0;
     }
     return metriquePourChaqueHistoire;
 }
