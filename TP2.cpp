@@ -186,12 +186,11 @@ void CalculIdf(vector<ArbreMap<string,int>> & arbresAvls, ArbreMap<string,int> &
                     }
                     //calculer logarithme
                     if(nbrOccurence != 0){
-                        int valeurLog = log2(sizeHistoire/nbrOccurence);
+                        double valeurLog = log2(sizeHistoire/nbrOccurence);
                         //inserer dans valeurIdf
                         valeurIdf[mot] = valeurLog;
                         cout << valeurLog << endl;
                         nbrOccurence = 0;
-
 
                     }
                 }    
