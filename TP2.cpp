@@ -272,7 +272,7 @@ void trouverCinqMeilleuresHistoires (vector<double> copieDeMetriques,
     reverse(listeTitre.begin(),listeTitre.end());  
     
     for (int j = 0; j < 5; ++j) {
-        int valeurMax = copieDeMetriques.at(0);
+        double valeurMax = copieDeMetriques.at(0);
         int indiceMax = 0;
         for (int i = 1; i < copieDeMetriques.size(); ++i) {
             if (copieDeMetriques.at(i) > valeurMax) {
