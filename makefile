@@ -39,7 +39,9 @@ TexteXML.cpp : TexteXML.hpp NoeudXML.hpp
 
 arbreavl.h : pile.h	
 
-$(NOM).cpp : Histoire.hpp Lecteur.hpp Phrase.hpp arbreavl.h
+arbremap.h : arbreavl.h	
+
+$(NOM).cpp : Histoire.hpp Lecteur.hpp Phrase.hpp arbreavl.h arbremap.h
 
 clean :
 	\rm -f *.o
