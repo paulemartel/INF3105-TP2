@@ -57,16 +57,16 @@ vector< Histoire * > * lireDocuments( string a_nomFichier )
 //void creerArbresAvlHistoire(&vector< Histoire * > * histoires);
 void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
  vector<ArbreMap<string,int>> & arbresAvls,vector<string> & listeTitre );
-void CalculIdf(vector<ArbreMap<string,int>> & arbresAvls, ArbreMap<string,int> & valeurIdf, int sizeHistoire,
+void CalculIdf(vector<ArbreMap<string,int>> & arbresAvls, ArbreMap<string,double> & valeurIdf, int sizeHistoire,
     vector< Histoire * > * const & histoires);
 
 void decouperRequeteEnMots (string const & requete, vector<string> & tabMots);
 
-// vector<double> calculerMetrique (vector<map<string,int>> const & arbresAvls, 
-//         map<string,int> & valeurIdf, vector<string> const & tabMots);
+vector<double> calculerMetrique (vector<ArbreMap<string,int>> & arbresAvls, 
+         ArbreMap<string,double> & valeurIdf, vector<string> const & tabMots);
 
-// /void trouverCinqMeilleuresHistoires (vector<double> metriques, 
-//         vector<string> listeTitre);
+void trouverCinqMeilleuresHistoires (vector<double> metriques, 
+         vector<string> listeTitre);
 
 
 int main() {
@@ -81,7 +81,7 @@ int main() {
     vector<string> listeTitre;
 
     //arbre contenant les idf(m)
-    ArbreMap<string,int> valeurIdf;
+    ArbreMap<string,double> valeurIdf;
 
     creerArbresAvlHistoire(histoires,arbresAvls,listeTitre);
     int sizeHistoire = histoires->size();
@@ -117,10 +117,10 @@ int main() {
             // on decoupe la requete en mots, on les stocke dans tabMots
             decouperRequeteEnMots(requete, tabMots);
             // on calcule la metrique V pour chaque histoire
-            // vector<double> metriques = calculerMetrique(arbresAvls, valeurIdf, 
-            //     tabMots);
+            vector<double> metriques = calculerMetrique(arbresAvls, valeurIdf, 
+                 tabMots);
             // on trouve les cinq meilleures histoires et on les affiche
-            //trouverCinqMeilleuresHistoires(metriques, listeTitre);
+            trouverCinqMeilleuresHistoires(metriques, listeTitre);
         }
     }
     return 0;
@@ -171,7 +171,7 @@ void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
     }
 }
 
-void CalculIdf(vector<ArbreMap<string,int>> & arbresAvls, ArbreMap<string,int> & valeurIdf,
+void CalculIdf(vector<ArbreMap<string,int>> & arbresAvls, ArbreMap<string,double> & valeurIdf,
     int sizeHistoire,vector< Histoire * > * const & histoires ){
     int nbrOccurence = 0;
     for( Histoire * histoire : * histoires ){
@@ -226,7 +226,6 @@ void decouperRequeteEnMots (string const & requete, vector<string> & tabMots) {
     }
 }
 
-
 /**
  * Calcule la metrique V pour chaque histoire, la stocke dans un vecteur et 
  * la retourne.
@@ -235,22 +234,20 @@ void decouperRequeteEnMots (string const & requete, vector<string> & tabMots) {
  * @param tabmots le tableau de mots extraits
  * @return un vecteur contenant la metrique V de chaque histoire
 **/
-/*
-vector<double> calculerMetrique (vector<map<string,int>> const & arbresAvls, 
-        map<string,int> & valeurIdf, vector<string> const & tabMots) {
+vector<double> calculerMetrique (vector<ArbreMap<string,int>> & arbresAvls, 
+         ArbreMap<string,double> & valeurIdf, vector<string> const & tabMots) {
     vector<double> metriquePourChaqueHistoire;
     double metriqueV;
     for(int i = 0; i < arbresAvls.size(); ++i ) {
         for (string mot : tabMots) {
-            double tf = ((arbresAvls.at(i)).find(mot))->second;
-            double idf = (valeurIdf.find(mot))->second; 
+            double tf = (arbresAvls[i][mot]);
+            double idf = (valeurIdf[mot]); 
             metriqueV += (tf * idf);
         }
         metriquePourChaqueHistoire.push_back(metriqueV);
     }
     return metriquePourChaqueHistoire;
 }
-*/
 
 /**
  * Trouve et affiche les cinq meilleurs histoires, d'apres leur metrique V.
@@ -258,7 +255,7 @@ vector<double> calculerMetrique (vector<map<string,int>> const & arbresAvls,
  * @param metriques un vecteur contenant la metrique V de chaque histoire
  * @param arbresAvls les arbres des histoires
 **/
-/*
+
 void trouverCinqMeilleuresHistoires (vector<double> copieDeMetriques,
         vector<string> listeTitre) {
     
@@ -280,4 +277,3 @@ void trouverCinqMeilleuresHistoires (vector<double> copieDeMetriques,
         copieDeMetriques.at(indiceMax) = -1;
     }
 }
-*/
