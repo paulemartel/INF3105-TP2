@@ -1,9 +1,10 @@
+
+
 #include "DocumentXML.hpp"
 #include "ElementXML.hpp"
 #include "Histoire.hpp"
 #include "Lecteur.hpp"
 #include "arbreavl.h"
-#include "arbremap.h"
 
 #include <algorithm>
 #include <cassert>
@@ -19,11 +20,44 @@
 
 using namespace std;
 
+vector< Histoire * > * lireDocuments( string a_nomFichier )
+{
+    vector< Histoire * > * histoires = new vector< Histoire * >();
+    DocumentXML * listeFichiers = lireFichierXML( a_nomFichier );
+
+    assert( nullptr != listeFichiers );
+    ElementXML * courant = listeFichiers->racine();
+    assert( nullptr != courant );
+
+    courant = courant->prochainElement();
+
+    assert( nullptr != courant );
+    for( NoeudXML * contenu : * courant )
+    {
+        assert( nullptr != contenu );
+        if( contenu->estElement() )
+        {
+            ElementXML * element = ( ElementXML * )contenu;
+
+            assert( nullptr != element );
+            DocumentXML * doc = lireFichierXML( element->attribut( string( "fichier" ) ) );
+
+            assert( nullptr != doc );
+            vector< Histoire * > * h = extraireHistoires( * doc );
+
+            assert( nullptr != h );
+            assert( nullptr != histoires );
+            histoires->insert( histoires->end(), h->begin(), h->end() );
+        }
+    }
+
+    return histoires;
+}
+
 //declaration de fonctions
 //void creerArbresAvlHistoire(&vector< Histoire * > * histoires);
-vector< Histoire * > * lireDocuments( string a_nomFichier );
 void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
-vector<map<string,int>> & arbresAvls,vector<string> & listeTitre );
+ vector<map<string,int>> & arbresAvls,vector<string> & listeTitre );
 void CalculIdf(vector<map<string,int>> & arbresAvls, map<string,int> & valeurIdf, int sizeHistoire);
 
 void decouperRequeteEnMots (string const & requete, vector<string> & tabMots);
@@ -38,7 +72,7 @@ void trouverCinqMeilleuresHistoires (vector<double> metriques,
 int main() {
 
     //contient les histoires
-    //vector< Histoire * > * histoires = lireDocuments( string( "listeDocument.xml" ) );
+    vector< Histoire * > * histoires = lireDocuments( string( "listeDocument.xml" ) );
 
     //vecteur qui va contenir les arbres AVL de chaque histoire
     vector<map<string,int>> arbresAvls;
@@ -49,9 +83,11 @@ int main() {
     //arbre contenant les idf(m)
     map<string,int> valeurIdf;
 
-    //creerArbresAvlHistoire(histoires,arbresAvls,listeTitre);
-    //int sizeHistoire = histoires->size();
-    //CalculIdf(arbresAvls,valeurIdf,sizeHistoire);
+    creerArbresAvlHistoire(histoires,arbresAvls,listeTitre);
+    int sizeHistoire = histoires->size();
+    CalculIdf(arbresAvls,valeurIdf,sizeHistoire);
+
+
 
 
         // Les histoires ont une variable de classe 'titre'.
@@ -83,11 +119,10 @@ int main() {
             // on calcule la metrique V pour chaque histoire
             vector<double> metriques = calculerMetrique(arbresAvls, valeurIdf, 
                 tabMots);
-            // trouver 5 histoires et les afficher
-            trouverCinqMeilleuresHistoires(metriques, listeTitre); 
+            // on trouve les cinq meilleures histoires et on les affiche
+            trouverCinqMeilleuresHistoires(metriques, listeTitre);
         }
     }
-
     return 0;
 }
 
@@ -107,6 +142,7 @@ Construit aussi le vecteur de titres
 void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
  vector<map<string,int>> & arbresAvls, vector<string> & listeTitre  ){
     
+
     for( Histoire * histoire : * histoires ){
         int index = 0;
         //creer un arbre avl
@@ -136,8 +172,8 @@ void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
     }
 }
 
-void CalculIdf(vector<map<string,int>> & arbresAvls, 
-        map<string,int> & valeurIdf, int sizeHistoire ){
+void CalculIdf(vector<map<string,int>> & arbresAvls, map<string,int> & valeurIdf,
+int sizeHistoire ){
 
     for(map<string,int> arbre : arbresAvls){
         //pour chaque element de l'arbre
@@ -152,6 +188,7 @@ void CalculIdf(vector<map<string,int>> & arbresAvls,
                     if(arbre2.find(mot) != arbre2.end()){
                         nbrOccurence += arbre2.at(mot);
                     }
+
                 }
                 //calculer logarithme
                 if(nbrOccurence != 0){
@@ -187,7 +224,6 @@ void decouperRequeteEnMots (string const & requete, vector<string> & tabMots) {
     }
 }
 
-
 /**
  * Calcule la metrique V pour chaque histoire, la stocke dans un vecteur et 
  * la retourne.
@@ -203,9 +239,11 @@ vector<double> calculerMetrique (vector<map<string,int>> const & arbresAvls,
     for(int i = 0; i < arbresAvls.size(); ++i ) {
         for (string mot : tabMots) {
             double tf = (arbresAvls.at(i)).at(mot); // A MODIFIER
-            // Si marche pas : ((arbresAvls.at(i)).find(mot))->second;
+            // Si marche pas pour notre vrai arbre : 
+            // ((arbresAvls.at(i)).find(mot))->second;
             double idf = valeurIdf.at(mot); // A MODIFIER
-            // Si marche pas : (valeurIdf.find(mot))->second; 
+            // Si marche pas pour notre vrai arbre : 
+            // (valeurIdf.find(mot))->second; 
             metriqueV += (tf * idf);
         }
         metriquePourChaqueHistoire.push_back(metriqueV);
@@ -237,35 +275,6 @@ void trouverCinqMeilleuresHistoires (vector<double> copieDeMetriques,
     }
 }
 
-vector< Histoire * > * lireDocuments( string a_nomFichier )
-{
-    vector< Histoire * > * histoires = new vector< Histoire * >();
-    DocumentXML * listeFichiers = lireFichierXML( a_nomFichier );
 
-    assert( nullptr != listeFichiers );
-    ElementXML * courant = listeFichiers->racine();
-    assert( nullptr != courant );
 
-    courant = courant->prochainElement();
 
-    assert( nullptr != courant );
-    for( NoeudXML * contenu : * courant )
-    {
-        assert( nullptr != contenu );
-        if( contenu->estElement() )
-        {
-            ElementXML * element = ( ElementXML * )contenu;
-
-            assert( nullptr != element );
-            DocumentXML * doc = lireFichierXML( element->attribut( string( "fichier" ) ) );
-
-            assert( nullptr != doc );
-            vector< Histoire * > * h = extraireHistoires( * doc );
-
-            assert( nullptr != h );
-            assert( nullptr != histoires );
-            histoires->insert( histoires->end(), h->begin(), h->end() );
-        }
-    }
-    return histoires;
-}
