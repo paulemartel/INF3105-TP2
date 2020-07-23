@@ -53,17 +53,15 @@ vector< Histoire * > * lireDocuments( string a_nomFichier )
 }
 
 //declaration de fonctions
-//void creerArbresAvlHistoire(&vector< Histoire * > * histoires);
+
 void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
  vector<ArbreMap<string,int>> & arbresAvls,vector<string> & listeTitre );
-void CalculIdf(vector<ArbreMap<string,int>> & arbresAvls, ArbreMap<string,double> & valeurIdf, int sizeHistoire,
+void CalculIdf(vector<ArbreMap<string,int>> & arbresAvls,
+ ArbreMap<string,double> & valeurIdf, int sizeHistoire,
     vector< Histoire * > * const & histoires);
-
 void decouperRequeteEnMots (string const & requete, vector<string> & tabMots);
-
 vector<double> calculerMetrique (vector<ArbreMap<string,int>> & arbresAvls, 
          ArbreMap<string,double> & valeurIdf, vector<string> const & tabMots);
-
 void trouverCinqMeilleuresHistoires (vector<double> metriques, 
          vector<string> listeTitre);
 
@@ -71,7 +69,8 @@ void trouverCinqMeilleuresHistoires (vector<double> metriques,
 int main() {
 
     //contient les histoires
-    vector< Histoire * > * histoires = lireDocuments( string( "listeDocument.xml" ) );
+    vector< Histoire * > * histoires 
+    = lireDocuments( string( "listeDocument.xml" ) );
 
     //vecteur qui va contenir les arbres AVL de chaque histoire
     vector<ArbreMap<string,int>> arbresAvls;
@@ -86,19 +85,6 @@ int main() {
     int sizeHistoire = histoires->size();
     CalculIdf(arbresAvls,valeurIdf,sizeHistoire,histoires);
 
-
-
-
-
-
-
-        // Les histoires ont une variable de classe 'titre'.
-        //cout << histoire->titre() << endl;
-
-            // p.begin() va chercher le premier mot de la Phrase p.  c'est aussi un iterateur et il peut
-            // s'utiliser avec les for augment�s.
-            // ici, nous affichons seulement le premier mot de la Phrase.
-            //cout << *( p.begin() ) << endl;
 
 
     /* PHASE DE REQUETE */
@@ -129,83 +115,85 @@ int main() {
 }
 
 /**
-Parcourt chaque histoire du vecteur histoire et creer un
-arbre AVL pour categorisant chaque mot de l'histoire ou
+Parcourt chaque histoire du vecteur histoire et cree un
+arbre AVL categorisant chaque mot de l'histoire ou
 la clef est le mot en string et la definition est le 
 nombre d'occurence du mot dans l'histoire
+Construit aussi le vecteur de titres
 @param &vector< Histoire * > * histoires, le vecteur
 contenant les histoire
-@param vector<ArbreAVL<string>> & arbresAvls le vecteur
-qui stocke les arbre avl de chaque mot de l'histoire
-Construit aussi le vecteur de titres
+@param vector<ArbreMap<string,int>> & arbresAvls le vecteur
+qui contient l'arbre map de chaque histoire
+@param vector<string> & listeTitre vecteur pour stocker
+la liste des titres
 **/
 
-//TODO : EST CE QU'IL FAUT AVOIR DES MOTS a 0?
 void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
- vector<ArbreMap<string,int>> & arbresAvls, vector<string> & listeTitre  ){
+ vector<ArbreMap<string,int>> & arbresAvls, vector<string> & listeTitre ){
     
-
     for( Histoire * histoire : * histoires ){
         int index = 0;
-        //creer un arbre avl
         ArbreMap<string,int> arbre;
-        //ajouter titre
         listeTitre.push_back(histoire->titre());
-        //cout << histoire->titre() << endl;
         for( Phrase p : * histoire ){
-            //chaque phrase ajouter le mot a l'arbre
             for(vector< string >::const_iterator iter = p.begin();
                 iter!=p.end();++iter){
-                //cout<<"MOT: "<< (*iter)<< endl;
-                //TODO occurence + verifier que le mot existe deja
                 if(arbre.rechercher(*iter) != 0){
                     string mot = *(iter);
-                    //changer nombre d'occurence du noeud
                     arbre[mot]++;
                 } else{
                     arbre[*iter] = 1;
                 }
             }
         }
-        arbresAvls.push_back(arbre);
-        cout << "NOMBRE DE : allo : " << arbre["allo"] << endl;
-        
+        arbresAvls.push_back(arbre);        
         index++;
     }
 }
 
-void CalculIdf(vector<ArbreMap<string,int>> & arbresAvls, ArbreMap<string,double> & valeurIdf,
-    int sizeHistoire,vector< Histoire * > * const & histoires ){
+/**
+Cree un arbre qui stoque et calcule les quantite idf pour chaque mot
+@param vector<ArbreMap<string,int>> & arbresAvls le vecteur
+qui contient l'arbre map de chaque histoire
+@param ArbreMap<string,double> & valeurIdf vecteur qui stocke
+les valeurs idf de chaque mot
+@param int sizeHistoire taille du vecteur histoire
+@param vector< Histoire * > * const & histoires le vecteur
+contenant les histoire
+
+
+**/
+
+void CalculIdf(vector<ArbreMap<string,int>> & arbresAvls,
+ ArbreMap<string,double> & valeurIdf,int sizeHistoire,
+ vector< Histoire * > * const & histoires ){
+
     int nbrOccurence = 0;
     for( Histoire * histoire : * histoires ){
         for( Phrase p : * histoire ){
-             for(vector< string >::const_iterator iter = p.begin();iter!=p.end();++iter){
+             for(vector< string >::const_iterator iter = p.begin();
+                iter!=p.end();++iter){
+
                 string mot = *iter;
                 if(valeurIdf.rechercher(mot) == 0){
+
                     for(ArbreMap<string,int> arbre : arbresAvls){
-                    //calculer nbr occurence du mot
                         if(arbre[mot] != 0){
                             nbrOccurence++;
                         }
                     }
                     //calculer logarithme
                     if(nbrOccurence != 0){
-                        cout << "MOT: " << mot << endl;
-                        cout<<"SIZE : " << sizeHistoire<<endl;
-                        cout<<"NBR OCCURENCE: "<<nbrOccurence<<endl;
-                        double valeurLog = log2((double)sizeHistoire/(double)nbrOccurence);
-                        //inserer dans valeurIdf
+                        double valeurLog 
+                        = log2((double)sizeHistoire/(double)nbrOccurence);
                         valeurIdf[mot] = valeurLog;
-                        cout << valeurLog << endl;
                         nbrOccurence = 0;
-
                     }
                 }    
             }    
         }    
 
     }
-
 }
 
 
