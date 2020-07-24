@@ -1,11 +1,21 @@
-/*  INF3105 - Structures de données et algorithmes       *
- *  UQAM / Département d'informatique                    *
- *  Automne 2018 / TP2                                   *
- *  Pile pour intérateurs ArbreAVL pour Lab8             *
- *  http://ericbeaudry.uqam.ca/INF3105/                  */
 
 #if !defined(__PILE__H__)
 #define __PILE__H__
+
+/*
+ * Permet la creation de pile necessaire a la classe arbreAVL.h.
+ * Code repris en grande partie des laboratoires.
+ *
+ * Auteures : Paule Martel et Gabrielle Poitras
+ * Code permanent : 
+ *     MARP16569700
+ *     POIG16519008
+ * Courriel : 
+ *     martel.paule@courrier.uqam.ca
+ *     poitras.gabrielle.2@courrier.uqam.ca
+ * Cours : INF3105-30
+ * Date : 2020-06-22
+ */
 
 template <class T>
 class Pile
@@ -26,7 +36,6 @@ class Pile
     const Pile<T>&    operator = (const Pile<T>&);
 
   private:
-    //Pile(const Pile&); // on pourrait préférer mettre le constructeur par copie privé.
     
     class Cellule
     {
@@ -58,10 +67,8 @@ template <class T>
 Pile<T>::Pile(const Pile<T>& autre)
 {
     sommet = NULL;
-    // version paresseuse : il suffit d'appeler l'opéreateur =
     *this = autre;
 }
-
 
 template <class T>
 void Pile<T>::vider()
@@ -104,7 +111,6 @@ void Pile<T>::depiler(T& e)
     delete c;
 }
 
-
 template <class T>
 const Pile<T>& Pile<T>::operator = (const Pile<T>& autre)
 {
@@ -127,7 +133,6 @@ const Pile<T>& Pile<T>::operator = (const Pile<T>& autre)
         delete a;
         a = temp;
     }
-
     return *this;
 }
 

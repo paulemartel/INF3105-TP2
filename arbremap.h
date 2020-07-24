@@ -1,14 +1,21 @@
-/* UQAM / Département d'informatique
-   INF3105 - Structures de données et algorithmes
-   Squelette pour classe générique ArbreMap<K,V> pour le Lab8 et le TP2.
-
-   AUTEUR(S):
-    1) Nom + Code permanent du l'étudiant.e 1
-    2) Nom + Code permanent du l'étudiant.e 2
-*/
 
 #if !defined(__ARBREMAP_H__)
 #define __ARBREMAP_H__
+
+/*
+ * Permet la construction d'arbres map pour le stockage des mots contenus
+ * dans les histoires et des statistiques connexes.
+ *
+ * Auteures : Paule Martel et Gabrielle Poitras
+ * Code permanent : 
+ *     MARP16569700
+ *     POIG16519008
+ * Courriel : 
+ *     martel.paule@courrier.uqam.ca
+ *     poitras.gabrielle.2@courrier.uqam.ca
+ * Cours : INF3105-30
+ * Date : 2020-07-23
+ */
 
 #include "arbreavl.h"
 
@@ -16,8 +23,7 @@ template <class K, class V>
 class ArbreMap
 {
   private:
-    // À compléter : voir la Section 8.11 (Arbres associatifs (Mapping Trees)) des notes de cours.
-        class Entree{
+        class Entree {
         public:
             Entree(const K& c): cle(c),valeur(){}
             K cle;
@@ -32,7 +38,6 @@ class ArbreMap
                 return cle == e.cle;
             }
     };
-
 
     ArbreAVL<Entree> entrees;
 
@@ -57,19 +62,13 @@ class ArbreMap
     Iterateur debut() const;
     Iterateur fin() const;
     Iterateur rechercher(const K& cle) const;
-    //Iterateur rechercherEgalOuSuivant(const K& cle) const;
-    //Iterateur rechercherEgslOuPrecedent(const K& cle) const;  
     bool contient(const K&) const;
-
     void enlever(const K&);
     void vider();
     bool vide() const;
-
     const V& operator[] (const K&) const;
     V& operator[] (const K&);
 };
-
-
 
 template <class K, class V>
 void ArbreMap<K,V>::vider(){
@@ -85,13 +84,6 @@ template <class K, class V>
 void ArbreMap<K,V>::enlever(const K& c)
 {
     entrees.enlever(Entree(c));
-}
-
-template <class K, class V>
-bool ArbreMap<K,V>::contient(const K& c) const
-{
-    // À compléter
-    return false;
 }
 
 template <class K, class V>
@@ -127,6 +119,7 @@ template <class K, class V>
 const K& ArbreMap<K,V>::Iterateur::cle() const{
     return (*iter).cle;
 }
+
 template <class K, class V>
 const V& ArbreMap<K,V>::Iterateur::valeur() const{
     return (*iter).valeur;
@@ -144,7 +137,6 @@ typename ArbreMap<K,V>::Iterateur& ArbreMap<K,V>::Iterateur::operator ++(){
     if(!*this) return *this;
     iter++;
     return *this;
-    
 }
 
 template <class K, class V>
@@ -152,10 +144,8 @@ ArbreMap<K,V>::Iterateur::operator bool() const{
     return iter;
 }
 
-
 template <class K, class V>
 bool ArbreMap<K,V>::Iterateur::operator!() const{
-
     return !iter;
 }
 
@@ -163,7 +153,6 @@ template <class K, class V>
 typename ArbreMap<K,V>::Iterateur ArbreMap<K,V>::rechercher(const K& e) const{
     return entrees.rechercher(Entree(e));
 }
-
 
 #endif
 
