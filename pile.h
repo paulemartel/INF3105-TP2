@@ -26,8 +26,8 @@ class Pile
     ~Pile();
 
     void empiler(const T&);
-  
-    void depiler(T& out);  // Depiler et copier le sommet dans out.
+    // Depiler et copier le sommet dans out.
+    void depiler(T& out);  
     T depiler();
 
     bool vide() const { return sommet==NULL;}
@@ -52,7 +52,7 @@ class Pile
 #include "pile.h"
 
 /**
-Contruit pile avec sommet nul
+* Contruit une pile avec un sommet nul
 **/
 template <class T>
 Pile<T>::Pile()
@@ -60,7 +60,7 @@ Pile<T>::Pile()
     sommet = NULL;
 }
 /**
-Detruit la pile
+* Detruit la pile.
 **/
 template <class T>
 Pile<T>::~Pile()
@@ -68,7 +68,7 @@ Pile<T>::~Pile()
     vider();
 }
 /**
-Contruit pile a partir d'une autre
+* Contruit une pile a partir d'une autre pile.
 **/
 template <class T>
 Pile<T>::Pile(const Pile<T>& autre)
@@ -78,7 +78,7 @@ Pile<T>::Pile(const Pile<T>& autre)
 }
 
 /**
-Vide une pile de son contenu
+* Vide une pile de son contenu.
 **/
 template <class T>
 void Pile<T>::vider()
@@ -87,9 +87,10 @@ void Pile<T>::vider()
         depiler();  
 }
 /**
-Contruit cellule suivante
-@param const T& e element suivant
-@param Cellule* c la cellule ou mettre suivant
+* Contruit la cellule suivante.
+*
+* @param const T& e element suivant
+* @param Cellule* c la cellule ou mettre suivant
 **/
 template <class T>
 Pile<T>::Cellule::Cellule(const T& e, Cellule* c)
@@ -99,8 +100,9 @@ Pile<T>::Cellule::Cellule(const T& e, Cellule* c)
 }
 
 /**
-Empile un objet
-@param const T& e element a empiler
+* Empile un objet.
+*
+* @param const T& e element a empiler
 **/
 template <class T>
 void Pile<T>::empiler(const T& e)
@@ -110,8 +112,9 @@ void Pile<T>::empiler(const T& e)
 }
 
 /**
-Depile objet avec objet non retourne
-@return contenu
+* Depile un objet.
+*
+* @return contenu
 **/
 template <class T>
 T Pile<T>::depiler()
@@ -124,8 +127,9 @@ T Pile<T>::depiler()
 }
 
 /**
-Depile objet avec reference
-@param T& e element a depiler
+* Depile un objet (version avec element passe en reference).
+*
+* @param T& e element a depiler
 **/
 template <class T>
 void Pile<T>::depiler(T& e)
@@ -138,10 +142,10 @@ void Pile<T>::depiler(T& e)
 }
 
 /**
-Compare l'egalite entre deux piles
-@param const Pile<T>& autre autre pile
-avec lequel faire la comparaison
-@return la pile
+* Verifie l'egalite entre deux piles.
+*
+* @param const Pile<T>& autre autre pile avec laquelle on fait la comparaison
+* @return la pile
 **/
 template <class T>
 const Pile<T>& Pile<T>::operator = (const Pile<T>& autre)

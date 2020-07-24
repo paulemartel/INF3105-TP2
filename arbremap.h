@@ -71,7 +71,7 @@ class ArbreMap
 };
 
 /**
-Vide l'arbre de son contenu
+* Vide l'arbre de son contenu.
 **/
 template <class K, class V>
 void ArbreMap<K,V>::vider(){
@@ -79,8 +79,9 @@ void ArbreMap<K,V>::vider(){
 }
 
 /**
-Indique si l'arbre est vide
-@return true si c'est le cas sinon false
+* Indique si l'arbre est vide.
+*
+* @return true si c'est le cas sinon false
 **/
 template <class K, class V>
 bool ArbreMap<K,V>::vide() const{
@@ -88,8 +89,9 @@ bool ArbreMap<K,V>::vide() const{
 }
 
 /**
-Enleve un element a l'arbre
-@param const K& c clef a enlever
+* Enleve un element a l'arbre.
+*
+* @param const K& c clef a enlever
 **/
 template <class K, class V>
 void ArbreMap<K,V>::enlever(const K& c)
@@ -98,9 +100,10 @@ void ArbreMap<K,V>::enlever(const K& c)
 }
 
 /**
-Accede au contenu d'un element de l'arbre
-@param const K& c clef de l'element
-@return la valeur attachee a la clef
+* Accede au contenu d'un element de l'arbre.
+*
+* @param const K& c clef de l'element
+* @return la valeur attachee a la clef
 **/
 template <class K, class V>
 const V& ArbreMap<K,V>::operator[] (const K& c)  const
@@ -110,10 +113,10 @@ const V& ArbreMap<K,V>::operator[] (const K& c)  const
 }
 
 /**
-Accede au contenu d'un element de l'arbre
-mais la recherche avant
-@param const K& c clef de l'element
-@return la valeur attachee a la clef
+* Accede au contenu d'un element de l'arbre, au moyen d'une recherche.
+* 
+* @param const K& c clef de l'element
+* @return la valeur attachee a la clef
 **/
 template <class K, class V>
 V& ArbreMap<K,V>::operator[] (const K& c) 
@@ -127,8 +130,9 @@ V& ArbreMap<K,V>::operator[] (const K& c)
 }
 
 /**
-Pointe au debut de l'arbre map
-@return l'iterateur pointant au debut
+* Pointe au debut de l'arbre map.
+*
+* @return l'iterateur pointant au debut
 **/
 template <class K, class V>
 typename ArbreMap<K,V>::Iterateur ArbreMap<K,V>::debut() const{
@@ -136,8 +140,9 @@ typename ArbreMap<K,V>::Iterateur ArbreMap<K,V>::debut() const{
 }
 
 /**
-Pointe a la fin de l'arbre map
-@return l'iterateur pointant a la fin
+* Pointe a la fin de l'arbre map.
+*
+* @return l'iterateur pointant a la fin
 **/
 template <class K, class V>
 typename ArbreMap<K,V>::Iterateur ArbreMap<K,V>::fin() const{
@@ -146,8 +151,9 @@ typename ArbreMap<K,V>::Iterateur ArbreMap<K,V>::fin() const{
 }
 
 /**
-Va chercher la clef
-@return contenu de la clef
+* Va chercher la clef.
+*
+* @return contenu de la clef
 **/
 template <class K, class V>
 const K& ArbreMap<K,V>::Iterateur::cle() const{
@@ -155,8 +161,9 @@ const K& ArbreMap<K,V>::Iterateur::cle() const{
 }
 
 /**
-Va chercher la valeur
-@return contenu de la valeur
+* Va chercher la valeur.
+*
+* @return contenu de la valeur
 **/
 template <class K, class V>
 const V& ArbreMap<K,V>::Iterateur::valeur() const{
@@ -164,7 +171,7 @@ const V& ArbreMap<K,V>::Iterateur::valeur() const{
 }
 
 /**
-Incremente la valeur d'un int dans l'arbre
+* Incremente la valeur d'un entier dans l'arbre (pre-increment).
 **/
 template <class K, class V>
 typename ArbreMap<K,V>::Iterateur ArbreMap<K,V>::Iterateur::operator ++(int){
@@ -174,7 +181,7 @@ typename ArbreMap<K,V>::Iterateur ArbreMap<K,V>::Iterateur::operator ++(int){
 }
 
 /**
-Incremente une valeur dans l'arbre
+* Incremente une valeur d'un iterateur dans l'arbre (post-increment).
 **/
 template <class K, class V>
 typename ArbreMap<K,V>::Iterateur& ArbreMap<K,V>::Iterateur::operator ++(){
@@ -184,8 +191,9 @@ typename ArbreMap<K,V>::Iterateur& ArbreMap<K,V>::Iterateur::operator ++(){
 }
 
 /**
-indique si l'iterateur existe
-@return true si c'est le cas sinon false
+* Indique si l'iterateur existe.
+*
+* @return true si c'est le cas sinon false
 **/
 template <class K, class V>
 ArbreMap<K,V>::Iterateur::operator bool() const{
@@ -193,8 +201,9 @@ ArbreMap<K,V>::Iterateur::operator bool() const{
 }
 
 /**
-indique si l'iterateur existe pas
-@return true si c'est le cas sinon false
+* Indique si l'iterateur n'existe pas.
+*
+* @return true si c'est le cas sinon false
 **/
 template <class K, class V>
 bool ArbreMap<K,V>::Iterateur::operator!() const{
@@ -202,9 +211,10 @@ bool ArbreMap<K,V>::Iterateur::operator!() const{
 }
 
 /**
-Recherche dans l'arbre map a l'aide de l'iterateur
-@param const K& e element a rechercher
-@return l'iterateur pointant sur la valeur trouvee
+* Recherche dans l'arbre map a l'aide de l'iterateur.
+*
+* @param const K& e element a rechercher
+* @return l'iterateur pointant sur la valeur trouvee
 **/
 template <class K, class V>
 typename ArbreMap<K,V>::Iterateur ArbreMap<K,V>::rechercher(const K& e) const{

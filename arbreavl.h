@@ -28,7 +28,7 @@ class ArbreAVL {
     ArbreAVL(const ArbreAVL&);
     ~ArbreAVL();
 
-    // Annonce l'existence d'une classe Iterateur.
+    // Annonce l'existence d'une classe Iterateur
     class Iterateur;
 
     void inserer(const T&);
@@ -38,18 +38,18 @@ class ArbreAVL {
     void enlever(const T&);
     int  hauteur() const;
     
-    // Fonctions pour obtenir un itérateur (position dans l'arbre)    
+    // Fonctions pour obtenir un iterateur (position dans l'arbre)    
     Iterateur debut() const;
     Iterateur fin() const;
     Iterateur rechercher(const T&) const;
     Iterateur rechercherEgalOuSuivant(const T&) const;
     Iterateur rechercherEgalOuPrecedent(const T&) const;
 
-    // Accès aux éléments de l'arbre via un intérateur.
+    // Acces aux elements de l'arbre via un iterateur
     const T& operator[](const Iterateur&) const;
     T& operator[](const Iterateur&);
     
-    // Copie d'un arbre AVL.
+    // Copie d'un arbre AVL
     ArbreAVL& operator = (const ArbreAVL&);
 
   private:
@@ -126,9 +126,10 @@ ArbreAVL<T>::~ArbreAVL()
 }
 
 /**
-Verifie si l'arbre contient un element
-@param const T& element element a verifier
-@param return true si c'est le cas sinon false
+* Verifie si l'arbre contient un element.
+* 
+* @param const T& element element a verifier
+* @param return true si c'est le cas, sinon false
 **/
 template <class T>
 bool ArbreAVL<T>::contient(const T& element) const
@@ -137,10 +138,11 @@ bool ArbreAVL<T>::contient(const T& element) const
 }
 
 /**
-Trouve un element dans la liste
-@param const T& element element a trouver
-@param const Noeud* n noeud ou on se trouve presentement
-@return contenu
+* Trouve un element dans la liste.
+* 
+* @param const T& element element a trouver
+* @param const Noeud* n noeud ou on se trouve presentement
+* @return contenu
 **/
 template <class T>
 const T* ArbreAVL<T>::trouver(const T& element, const Noeud* n) const
@@ -158,8 +160,9 @@ const T* ArbreAVL<T>::trouver(const T& element, const Noeud* n) const
 }
 
 /**
-Insere un element dans la liste
-@param const T& element element a inserer
+* Insere un element dans la liste.
+*
+* @param const T& element element a inserer
 **/
 template <class T>
 void ArbreAVL<T>::inserer(const T& element)
@@ -168,9 +171,10 @@ void ArbreAVL<T>::inserer(const T& element)
 }
 
 /**
-Insere un element et equilibre arbre
-@param Noeud*& noeud noeud a equilibrer
-@param const T& element element a inserer
+* Insere un element et equilibre l'arbre.
+* 
+* @param Noeud*& noeud noeud a equilibrer
+* @param const T& element element a inserer
 **/
 template <class T>
 bool ArbreAVL<T>::inserer(Noeud*& noeud, const T& element)
@@ -220,8 +224,9 @@ bool ArbreAVL<T>::inserer(Noeud*& noeud, const T& element)
 }
 
 /**
-Fais une rotation Gauche droite sur la liste
-@param Noeud*& racinesousarbre noeud a equilibrer
+* Fait une rotation gauche-droite sur la liste.
+*
+* @param Noeud*& racinesousarbre noeud a equilibrer
 **/
 template <class T>
 void ArbreAVL<T>::rotationGaucheDroite(Noeud*& racinesousarbre)
@@ -240,8 +245,9 @@ void ArbreAVL<T>::rotationGaucheDroite(Noeud*& racinesousarbre)
 }
 
 /**
-Fais une rotation droite gauche sur la liste
-@param Noeud*& racinesousarbre noeud a equilibrer
+* Fais une rotation droite-gauche sur la liste.
+*
+* @param Noeud*& racinesousarbre noeud a equilibrer
 **/
 template <class T>
 void ArbreAVL<T>::rotationDroiteGauche(Noeud*& racinesousarbre)
@@ -261,8 +267,9 @@ void ArbreAVL<T>::rotationDroiteGauche(Noeud*& racinesousarbre)
 }
 
 /**
-Verifie si la liste est vide
-@return true si c'est le cas sinon false
+* Verifie si la liste est vide.
+*
+* @return true si c'est le cas sinon false
 **/
 template <class T>
 bool ArbreAVL<T>::vide() const
@@ -271,7 +278,7 @@ bool ArbreAVL<T>::vide() const
 }
 
 /**
-Vide la liste
+* Vide la liste.
 **/
 template <class T>
 void ArbreAVL<T>::vider(){
@@ -280,8 +287,9 @@ void ArbreAVL<T>::vider(){
 }
 
 /**
-Vider la liste a un certain noeud
-@param Noeud*& noeud noeud ou vider
+* Vide la liste a partir d'un certain noeud.
+*
+* @param Noeud*& noeud noeud ou vider
 **/
 template <class T>
 void ArbreAVL<T>::vider(Noeud*& noeud)
@@ -296,9 +304,10 @@ void ArbreAVL<T>::vider(Noeud*& noeud)
 }
 
 /**
-copie le contenu d'un noeud dans une autre
-@param const Noeud* source noeud source
-@param Noeud*& noeud nouveau noeud
+* Copie le contenu d'un noeud dans une autre.
+*
+* @param const Noeud* source noeud source
+* @param Noeud*& noeud nouveau noeud
 **/
 template <class T>
 void ArbreAVL<T>::copier(const Noeud* source, Noeud*& noeud) const
@@ -311,9 +320,10 @@ void ArbreAVL<T>::copier(const Noeud* source, Noeud*& noeud) const
 }
 
 /**
-Trouve le noeud maximum
-@param Noeud* n noeud de depart
-@return contenu noeud max
+* Trouve le noeud maximum.
+* 
+* @param Noeud* n noeud de depart
+* @return contenu noeud max
 **/
 template <class T>
 const T& ArbreAVL<T>::max(Noeud* n) const
@@ -326,8 +336,9 @@ const T& ArbreAVL<T>::max(Noeud* n) const
 }
 
 /**
-Enleve un element de la liste
-@param const T& element element a enlever
+* Enleve un element de la liste.
+*
+* @param const T& element element a enlever
 **/
 template <class T>
 void ArbreAVL<T>::enlever(const T& element)
@@ -336,9 +347,10 @@ void ArbreAVL<T>::enlever(const T& element)
 }
 
 /**
-Enleve un element et reequilibre arbre
-@param Noeud*& noeud noeud a equilibrer
-@param const T& element element a enlever
+* Enleve un element et equilibre l'arbre.
+*
+* @param Noeud*& noeud noeud a equilibrer
+* @param const T& element element a enlever
 **/
 template <class T>
 bool ArbreAVL<T>::enlever(Noeud*& noeud, const T& element)
@@ -409,8 +421,9 @@ bool ArbreAVL<T>::enlever(Noeud*& noeud, const T& element)
 }
 
 /**
-Donne pointeur qui pointe au debut de la liste
-@return pointeur pointant au debut de la liste
+* Donne un pointeur vers le debut de la liste.
+*
+* @return pointeur vers le debut de la liste
 **/
 template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::debut() const
@@ -427,8 +440,9 @@ typename ArbreAVL<T>::Iterateur ArbreAVL<T>::debut() const
 }
 
 /**
-Donne pointeur qui pointe a la fin de la liste
-@return pointeur pointant a la fin de la liste
+* Donne un pointeur vers la fin de la liste.
+*
+* @return pointeur pointant a la fin de la liste
 **/
 template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::fin() const
@@ -437,9 +451,10 @@ typename ArbreAVL<T>::Iterateur ArbreAVL<T>::fin() const
 }
 
 /**
-Rechercher dans la liste a l'aide de l'iterateur
-@param const T& e element a rechercher
-@return pointeur vers l'element trouve
+* Rechercher dans la liste a l'aide de l'iterateur.
+*
+* @param const T& e element a rechercher
+* @return pointeur vers l'element trouve
 **/
 template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::rechercher
@@ -463,8 +478,9 @@ typename ArbreAVL<T>::Iterateur ArbreAVL<T>::rechercher
 }
 
 /**
-Recherche dans la liste element egal ou suivant
-@return pointeur vers l'element
+* Recherche dans la liste un element egal ou suivant.
+*
+* @return pointeur vers l'element
 **/
 template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::rechercherEgalOuSuivant
@@ -475,8 +491,9 @@ typename ArbreAVL<T>::Iterateur ArbreAVL<T>::rechercherEgalOuSuivant
 }
 
 /**
-Recherche dans la liste element egal ou precedent
-@return pointeur vers l'element
+* Recherche dans la liste un element egal ou precedent.
+*
+* @return pointeur vers l'element
 **/
 template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::rechercherEgalOuPrecedent
@@ -500,9 +517,10 @@ typename ArbreAVL<T>::Iterateur ArbreAVL<T>::rechercherEgalOuPrecedent
 }
 
 /**
-Accede a un element dans la liste et assigne contenu
-@param const Iterateur& iterateur iterateur sur element
-@return le contenu
+* Accede a un element dans la liste et lui assigne un contenu.
+*
+* @param const Iterateur& iterateur iterateur sur element
+* @return le contenu
 **/
 template <class T>
 const T& ArbreAVL<T>::operator[](const Iterateur& iterateur) const
@@ -512,9 +530,11 @@ const T& ArbreAVL<T>::operator[](const Iterateur& iterateur) const
     return iterateur.courant->contenu;
 }
 /**
-Accede a un element dans la liste et assigne contenu avec reference
-@param const Iterateur& iterateur iterateur sur element
-@return le contenu
+* Accede a un element dans la liste et lui assigne un contenu (version avec 
+* passage en reference).
+*
+* @param const Iterateur& iterateur iterateur sur element
+* @return le contenu
 **/
 template <class T>
 T& ArbreAVL<T>::operator[](const Iterateur& iterateur)
@@ -524,8 +544,9 @@ T& ArbreAVL<T>::operator[](const Iterateur& iterateur)
     return iterateur.courant->contenu;
 }
 /**
-Transpose une liste dans une nouvelle
-@param const ArbreAVL& autre nouvelle liste d'arrive
+* Transpose une liste dans une nouvelle liste.
+*
+* @param const ArbreAVL& autre nouvelle liste
 **/
 template <class T>
 ArbreAVL<T>& ArbreAVL<T>::operator=(const ArbreAVL& autre) {
@@ -536,8 +557,9 @@ ArbreAVL<T>& ArbreAVL<T>::operator=(const ArbreAVL& autre) {
 }
 
 /**
-Contruit iterateur
-@param const ArbreAVL& a arbreAvl
+* Contruit un iterateur.
+*
+* @param const ArbreAVL& a arbreAvl
 **/
 template <class T>
 ArbreAVL<T>::Iterateur::Iterateur(const ArbreAVL& a)
@@ -546,8 +568,9 @@ ArbreAVL<T>::Iterateur::Iterateur(const ArbreAVL& a)
 }
 
 /**
-Contruit iterateur
-@param const ArbreAVL<T>::Iterateur& a iterateur sur arbre avl
+* Contruit un iterateur.
+*
+* @param const ArbreAVL<T>::Iterateur& a iterateur sur arbre avl
 **/
 template <class T>
 ArbreAVL<T>::Iterateur::Iterateur(const ArbreAVL<T>::Iterateur& a)
@@ -558,7 +581,7 @@ ArbreAVL<T>::Iterateur::Iterateur(const ArbreAVL<T>::Iterateur& a)
 }
 
 /**
-Incremente un element dans l'arbre
+* Incremente un element dans l'arbre.
 **/
 template <class T>
 typename ArbreAVL<T>::Iterateur& ArbreAVL<T>::Iterateur::operator++()
@@ -578,7 +601,7 @@ typename ArbreAVL<T>::Iterateur& ArbreAVL<T>::Iterateur::operator++()
 }
 
 /**
-Incremente un element dans l'arbre
+* Incremente un element dans l'arbre.
 **/
 template <class T>
 typename ArbreAVL<T>::Iterateur ArbreAVL<T>::Iterateur::operator++(int)
@@ -589,8 +612,9 @@ typename ArbreAVL<T>::Iterateur ArbreAVL<T>::Iterateur::operator++(int)
 }
 
 /**
-Indique si l'iterateur n'est pas vide
-@return true si c'est le cas sinon false
+* Indique si l'iterateur n'est pas vide.
+*
+* @return true si c'est le cas sinon false
 **/
 template <class T>
 ArbreAVL<T>::Iterateur::operator bool() const
@@ -599,8 +623,9 @@ ArbreAVL<T>::Iterateur::operator bool() const
 }
 
 /**
-Indique si l'iterateur est vide
-@return true si c'est le cas sinon false
+* Indique si l'iterateur est vide.
+*
+* @return true si c'est le cas, sinon false
 **/
 template <class T>
 bool ArbreAVL<T>::Iterateur::operator!() const{
@@ -608,8 +633,9 @@ bool ArbreAVL<T>::Iterateur::operator!() const{
 }
 
 /**
-Comparer iterateur
-@return true si pareil sinon false
+* Compare deux iterateurs.
+*
+* @return true si pareil, sinon false
 **/
 template <class T>
 bool ArbreAVL<T>::Iterateur::operator==(const Iterateur& o) const{
@@ -618,8 +644,9 @@ bool ArbreAVL<T>::Iterateur::operator==(const Iterateur& o) const{
 }
 
 /**
-Comparer iterateur
-@return true si pas pareil sinon false
+* Compare deux iterateurs.
+*
+* @return true si pas pareil, sinon false
 **/
 template <class T>
 bool ArbreAVL<T>::Iterateur::operator!=(const Iterateur& o) const{
@@ -628,8 +655,9 @@ bool ArbreAVL<T>::Iterateur::operator!=(const Iterateur& o) const{
 }
 
 /**
-Acceder contenu
-@return contenu
+* Accede au contenu.
+*
+* @return contenu
 **/
 template <class T>
 const T& ArbreAVL<T>::Iterateur::operator *() const
@@ -639,8 +667,9 @@ const T& ArbreAVL<T>::Iterateur::operator *() const
 }
 
 /**
-Mettre deux arbre egal
-@return nouvel arbre
+* Associe deux arbres.
+*
+* @return nouvel arbre
 **/
 template <class T>
 typename ArbreAVL<T>::Iterateur& ArbreAVL<T>::Iterateur::operator
