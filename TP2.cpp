@@ -222,12 +222,14 @@ void decouperRequeteEnMots (string const & requete, vector<string> & tabMots) {
 vector<double> calculerMetrique (vector<ArbreMap<string,int>> & arbresAvls, 
          ArbreMap<string,double> & valeurIdf, vector<string> const & tabMots) {
     vector<double> metriquePourChaqueHistoire;
-    double metriqueV;
+    double metriqueV = 0.0;
     for(int i = 0; i < arbresAvls.size(); ++i ) {
         for (string mot : tabMots) {
             double tf = (arbresAvls[i][mot]);
-            double idf = (valeurIdf[mot]); 
-            metriqueV += (tf * idf);
+            if (tf != 0) {
+                double idf = (valeurIdf[mot]);
+                metriqueV += (tf * idf);
+            }
         }
         metriquePourChaqueHistoire.push_back(metriqueV);
         metriqueV = 0.0;
@@ -248,7 +250,7 @@ void trouverCinqMeilleuresHistoires (vector<double> copieDeMetriques,
     // on inverse les deux pour respecter l'ordre d'affichage des tests
     reverse(copieDeMetriques.begin(),copieDeMetriques.end());
     reverse(listeTitre.begin(),listeTitre.end());  
-    
+     
     for (int j = 0; j < 5; ++j) {
         double valeurMax = copieDeMetriques.at(0);
         int indiceMax = 0;
