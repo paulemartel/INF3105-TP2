@@ -132,6 +132,7 @@ void creerArbresAvlHistoire(vector< Histoire * > * const & histoires,
         for( Phrase p : * histoire ){
             for(vector< string >::const_iterator iter = p.begin();
                 iter!=p.end();++iter){
+                // si mot deja la l'incrementer
                 if(arbre.rechercher(*iter) != 0){
                     string mot = *(iter);
                     arbre[mot]++;
@@ -168,7 +169,7 @@ void CalculIdf(vector<ArbreMap<string,int>> & arbresAvls,
 
                 string mot = *iter;
                 if(valeurIdf.rechercher(mot) == 0){
-
+                    // chercher nombre d'occurences total
                     for(ArbreMap<string,int> arbre : arbresAvls){
                         if(arbre[mot] != 0){
                             nbrOccurence++;

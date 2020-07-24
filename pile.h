@@ -51,18 +51,25 @@ class Pile
 #include "assert.h"
 #include "pile.h"
 
+/**
+Contruit pile avec sommet nul
+**/
 template <class T>
 Pile<T>::Pile()
 {
     sommet = NULL;
 }
-
+/**
+Detruit la pile
+**/
 template <class T>
 Pile<T>::~Pile()
 {
     vider();
 }
-
+/**
+Contruit pile a partir d'une autre
+**/
 template <class T>
 Pile<T>::Pile(const Pile<T>& autre)
 {
@@ -70,13 +77,20 @@ Pile<T>::Pile(const Pile<T>& autre)
     *this = autre;
 }
 
+/**
+Vide une pile de son contenu
+**/
 template <class T>
 void Pile<T>::vider()
 {
     while(!vide())
         depiler();  
 }
-
+/**
+Contruit cellule suivante
+@param const T& e element suivant
+@param Cellule* c la cellule ou mettre suivant
+**/
 template <class T>
 Pile<T>::Cellule::Cellule(const T& e, Cellule* c)
  : suivante(c)
@@ -84,6 +98,10 @@ Pile<T>::Cellule::Cellule(const T& e, Cellule* c)
     contenu=e;
 }
 
+/**
+Empile un objet
+@param const T& e element a empiler
+**/
 template <class T>
 void Pile<T>::empiler(const T& e)
 {
@@ -91,6 +109,10 @@ void Pile<T>::empiler(const T& e)
     assert(sommet);
 }
 
+/**
+Depile objet avec objet non retourne
+@return contenu
+**/
 template <class T>
 T Pile<T>::depiler()
 {
@@ -101,6 +123,10 @@ T Pile<T>::depiler()
     return c.contenu;
 }
 
+/**
+Depile objet avec reference
+@param T& e element a depiler
+**/
 template <class T>
 void Pile<T>::depiler(T& e)
 {
@@ -111,6 +137,12 @@ void Pile<T>::depiler(T& e)
     delete c;
 }
 
+/**
+Compare l'egalite entre deux piles
+@param const Pile<T>& autre autre pile
+avec lequel faire la comparaison
+@return la pile
+**/
 template <class T>
 const Pile<T>& Pile<T>::operator = (const Pile<T>& autre)
 {
