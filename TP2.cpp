@@ -1,3 +1,23 @@
+/*
+ * TP2 - INF3105 ETE 2020
+ * Programme qui lit et analyse une serie d'histoires
+ * et qui trouve les nombres d'occurences des mots
+ * passees en requete par l'utilisateur et imprime
+ * a l'ecran les textes ou ces mots sont le plus present
+ * 
+ *
+ * Auteures : Paule Martel et Gabrielle Poitras
+ * Code permanent : 
+ *     MARP16569700
+ *     POIG16519008
+ * Courriel : 
+ *     martel.paule@courrier.uqam.ca
+ *     poitras.gabrielle.2@courrier.uqam.ca
+ * Cours : INF3105-30
+ * Date : 2020-06-22
+ */
+
+
 #include "DocumentXML.hpp"
 #include "ElementXML.hpp"
 #include "Histoire.hpp"
