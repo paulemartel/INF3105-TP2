@@ -97,7 +97,7 @@ int main() {
         string requete;
         vector<string> tabMots;
         // on demande une suite de mots a l'utilisateur
-        cout << "Entrez votre requete : " << endl;
+        cout << "Entrez votre requete : ";
         getline(cin, requete);
 
         if (requete.empty()) {

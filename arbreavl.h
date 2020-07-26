@@ -188,13 +188,13 @@ bool ArbreAVL<T>::inserer(Noeud*& noeud, const T& element)
         if(inserer(noeud->gauche, element))
         {
             noeud->equilibre++;
-            if(noeud->equilibre == 0)
+            if(noeud->equilibre == 0) {
                 return false;
-            if(noeud->equilibre == 1)
+            } else if(noeud->equilibre == 1) {
                 return true;
-            assert(noeud->equilibre==2);
-            if(noeud->gauche->equilibre == -1)
+            } else if (noeud->equilibre==2 && noeud->gauche->equilibre == -1) {
                 rotationDroiteGauche(noeud->gauche);
+            }
             rotationGaucheDroite(noeud);
         }
         return false;
@@ -205,12 +205,9 @@ bool ArbreAVL<T>::inserer(Noeud*& noeud, const T& element)
             noeud->equilibre--;
             if (noeud->equilibre == 0) {
                 return false;
-            }
-            if (noeud->equilibre == -1) {
+            } else if (noeud->equilibre == -1) {
                 return true;
-            }
-            assert (noeud->equilibre == -2);
-            if (noeud->droite->equilibre == 1) {
+            } else if (noeud->equilibre == -2 && noeud->droite->equilibre == 1) {
                 rotationGaucheDroite(noeud->droite);
             }
             rotationDroiteGauche(noeud);
@@ -344,80 +341,6 @@ template <class T>
 void ArbreAVL<T>::enlever(const T& element)
 {
     enlever(racine, element);
-}
-
-/**
-* Enleve un element et equilibre l'arbre.
-*
-* @param Noeud*& noeud noeud a equilibrer
-* @param const T& element element a enlever
-**/
-template <class T>
-bool ArbreAVL<T>::enlever(Noeud*& noeud, const T& element)
-{
-    if(element < noeud->contenu)
-    {
-        if(enlever(noeud->gauche, element))
-        {
-            noeud->equilibre--;
-            if(noeud->equilibre == 0)
-                return true;
-            if(noeud->equilibre == -1)
-                return false;
-            assert(noeud->equilibre == -2);
-            if(noeud->droite->equilibre == 1)
-                rotationGaucheDroite(noeud->droite);
-            rotationDroiteGauche(noeud);
-        }
-        return false;
-    }
-    else if(element > noeud->contenu)
-    {
-        if(enlever(noeud->droite, element))
-        {   
-            noeud->equilibre++;
-            if(noeud->equilibre == 0) {
-                return true;
-            }
-            if(noeud->equilibre == 1) {
-                return false;
-            }
-            assert(noeud->equilibre == 2);
-            if(noeud->gauche->equilibre == -1) {
-                rotationDroiteGauche(noeud->gauche);
-            }                                                                   
-            rotationGaucheDroite(noeud);
-        }
-        return false;
-    }
-    else if(element == noeud->contenu)
-    {
-        if (noeud->gauche==NULL && noeud->droite==NULL)
-        {
-            delete noeud;
-            noeud = NULL;
-            return true;
-        }
-        else
-        {
-            if (noeud->gauche==nullptr||noeud->droite==nullptr) {
-                if (noeud->gauche == nullptr) { 
-                    Noeud* temp = noeud->droite;
-                    delete noeud;
-                    noeud = noeud->droite;
-                } else { 
-                    Noeud* temp = noeud->gauche;
-                    delete noeud;
-                    noeud = noeud->gauche;
-                }
-            } else {
-                noeud->contenu = max(noeud->gauche);
-                return enlever(noeud->gauche, noeud->contenu);
-            }
-            return true;
-        }
-    }
-    return false;
 }
 
 /**
